@@ -1,40 +1,57 @@
 # QRCode.js
-QRCode.js is javascript library for making QRCode. QRCode.js supports Cross-browser with HTML5 Canvas and table tag in DOM.
+QRCode.js is javascript library for making QRCode. QRCode.js supports 微信小程序.
 QRCode.js has no dependencies.
 
+使用微信 `wx.createOffscreenCanvas` api 离线绘制二维码, 使用 `toDataURL` 方法转换为 `DataURL` 配合 `image` 标签使用.
+避免使用 `canvas` 标签, `canvas` 标签为原生标签, 使用起来限制和兼容性不友好.
+
 ## Basic Usages
-```
-<div id="qrcode"></div>
-<script type="text/javascript">
-new QRCode(document.getElementById("qrcode"), "http://jindo.dev.naver.com/collie");
-</script>
-```
 
-or with some options
+- 复制文件
 
-```
-<div id="qrcode"></div>
-<script type="text/javascript">
-var qrcode = new QRCode(document.getElementById("qrcode"), {
-	text: "http://jindo.dev.naver.com/collie",
-	width: 128,
-	height: 128,
-	colorDark : "#000000",
-	colorLight : "#ffffff",
-	correctLevel : QRCode.CorrectLevel.H
+复制 `qrcode.js` 文件到小程序 `utils` 目录中.
+
+- index.js
+
+```js
+import QRCode from '../../utils/qrcode';
+
+Page({
+  data: {
+    qrcodeDataUrl: '',
+  },
+  onLoad() {
+    const qrcode = new QRCode({
+      text : 'http://www.dotcoo.com',
+      width : 600,
+      height : 600
+    });
+    this.setData({
+      qrcodeDataUrl: qrcode.toDataURL(),
+    });
+  },
 });
-</script>
 ```
 
-and you can use some methods
+- index.wxml
 
-```
-qrcode.clear(); // clear the code.
-qrcode.makeCode("http://naver.com"); // make another code.
+```html
+<image src="{{qrcodeDataUrl}}" class="canvas" />
 ```
 
-## Browser Compatibility
-IE6~10, Chrome, Firefox, Safari, Opera, Mobile Safari, Android, Windows Mobile, ETC.
+- index.wxss
+
+```css
+.canvas {
+  width: 600rpx;
+  height: 600rpx;
+  border: 1rpx solid #ccc;
+}
+```
+
+## Manual
+
+[https://github.com/davidshimjs/qrcodejs](https://github.com/davidshimjs/qrcodejs)
 
 ## License
 MIT License
